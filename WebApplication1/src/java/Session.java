@@ -47,19 +47,15 @@ public class Session extends HttpServlet {
         try {
             String access_token = request.getParameter("access_token"),
                     user_id_string = request.getParameter("user_id");
-            int user_id = 0;
-            if (user_id_string != null) { user_id = Integer.parseInt(request.getParameter("user_id")); }
-            
-            System.out.println(access_token + user_id);
-            
+                        
             Session_Instance returnedSession = new Session_Instance();
             
             if (action.equals("get")) {
-                if (access_token == null) returnedSession = this.getSession("", user_id);
-                else if (user_id_string == null) returnedSession = this.getSession(access_token, -1);
+                if (access_token == null) returnedSession = this.getSession("", user_id_string);
+                else if (user_id_string == null) returnedSession = this.getSession(access_token, "-1");
             }
             else {
-                if (user_id_string != null) returnedSession = this.createSession(user_id);
+                if (user_id_string != null) returnedSession = this.createSession(user_id_string);
             }
             
             // Now we convert retunedSession object into json.
@@ -117,7 +113,7 @@ public class Session extends HttpServlet {
     Give access_token = "" to this function if you want to query
     using user_id. Other wise, give access_token != "".
     */
-    Session_Instance getSession(String access_token, int user_id) {
+    Session_Instance getSession(String access_token, String user_id) {
         // if access_token is given, then query using access token
         // if user id is given, then query using user id. 
         // but dont use them at the same time.
@@ -157,20 +153,24 @@ public class Session extends HttpServlet {
         return currentSession;
     }
     
-    Session_Instance createSession(int user_id) {
+    Session_Instance createSession(String user_id) {
         String access_token = "abcd";//UUID.randomUUID().toString().replace("-", "");
-
+        String session_state = "0";
         try {
             System.out.println(access_token);
             Class.forName("oracle.jdbc.driver.OracleDriver");
             Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","abcd");
             
-            String statement = "insert into session_user (user_id, access_token, session_state) values (?, ?, ?);";
-            PreparedStatement query = con.prepareStatement(statement);
-            query.setString(1, user_id);
-            query.setString(2, access_token);
-            query.setString(3, session_state);
-            int rs = query.executeUpdate();
+            System.out.println("insert into session_user (user_id, access_token, session_state) values (?, ?, ?);");
+            
+            PreparedStatement stmt1 = con.prepareStatement("insert into user_twitter_main(session_id, user_id, access_token, session_state) values (?,?,?)");
+            stmt1.setString(1, user_id);
+            stmt1.setString(2, "abcd");
+            stmt1.setString(3, "1");
+            int i = stmt1.executeUpdate();
+            
+            
+            int rs = stmt1.executeUpdate();
             
            
         }
@@ -178,7 +178,7 @@ public class Session extends HttpServlet {
             System.out.println("Exception at createSession:" + e);
         }
         
-        Session_Instance current_session = this.getSession(access_token, -1);
+        Session_Instance current_session = this.getSession(access_token, "-1");
         
         return current_session;
     }
