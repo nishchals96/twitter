@@ -35,7 +35,6 @@ public class Login extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
         
-        
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         
@@ -125,28 +124,6 @@ public class Login extends HttpServlet {
         }
         
         return success;
-    }
-    
-    int signup(){
-        Scanner sc1 = new Scanner(System.in);
-        System.out.println("enter the username");
-        String username = sc1.nextLine();
-        System.out.println("enter the password");
-        String password = sc1.nextLine();
-        try{
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            try (Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","abcd")) {
-                PreparedStatement stmt1 = con.prepareStatement("insert into user_twitter_main values (?,?)");
-                stmt1.setString(1,username);
-                stmt1.setString(2,password);
-                int i = stmt1.executeUpdate();
-            }
-            
-            }
-            catch(Exception e){}
-        return(0);
-        
-        
     }
 }
 
