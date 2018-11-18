@@ -7,12 +7,14 @@
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
+import static java.net.Proxy.Type.HTTP;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -52,6 +54,10 @@ public class Signup extends HttpServlet {
         String message;
         if (success == 1){
             message = "success";
+            
+            RequestDispatcher rd = request.getRequestDispatcher("/Session");
+            
+            rd.include(request, response);
         }
         else{
             message = "failure";

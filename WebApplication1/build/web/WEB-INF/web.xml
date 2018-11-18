@@ -12,6 +12,10 @@
         <servlet-name>Signup</servlet-name>
         <servlet-class>Signup</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Session</servlet-name>
+        <servlet-class>Session</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DemoServlet</servlet-name>
         <url-pattern>/DemoServlet</url-pattern>
@@ -23,6 +27,10 @@
     <servlet-mapping>
         <servlet-name>Signup</servlet-name>
         <url-pattern>/Signup</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Session</servlet-name>
+        <url-pattern>/Session</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
